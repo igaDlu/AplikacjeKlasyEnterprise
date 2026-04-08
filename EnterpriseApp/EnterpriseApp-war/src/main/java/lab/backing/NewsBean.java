@@ -31,16 +31,11 @@ public class NewsBean implements Serializable {
 
 
     void sendNewsItem(String heading, String body) {
-        try {
-            ObjectMessage message = context.createObjectMessage();
-            NewsItem e = new NewsItem();
-            e.setHeading(heading);
-            e.setBody(body);
-            message.setObject((Serializable) e);
-            context.createProducer().send(queue, message);
-        } catch (JMSException ex) {
-            ex.printStackTrace();
-        }
+        // Tworzymy tekst w formacie "Nagłówek|Treść"
+        String combinedText = heading + "|" + body;
+
+        // Wysyłamy jako zwykły TextMessage
+        context.createProducer().send(queue, combinedText);
     }
     public String submitNews()
     {
